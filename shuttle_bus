@@ -1,0 +1,31 @@
+def solution(n, t, m, timetable):
+    from collections import deque
+    l, timetable = len(timetable), deque(sorted(timetable))
+    for i in range(l):
+        timetable[i] = int(timetable[i][:2]) * 60 + int(timetable[i][3:5])
+    bustable = [540]
+    print()
+    for i in range(1, n):
+        bustable.append(i * t + 540)
+    leftcnt, flag, leftbus = 0, 0, []
+    for i in range(n):
+        bus = [0] * m
+        for j in range(m):
+            if timetable[0] <= bustable[i]:
+                bus[i] = timetable.popleft()
+                leftcnt += 1
+                if leftcnt == l:
+                    flag = 1
+                    break
+            else:
+                break
+        leftbus.append(bus)
+        if flag:
+            lastbus = i
+            break
+    print('leftbus: %s' %leftbus)
+    print('lastbus: %s' %lastbus)
+    answer = ''
+    return answer
+
+solution(2, 10, 2, ["09:10", "09:09", "08:00"])
