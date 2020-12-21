@@ -2,25 +2,12 @@ def solution(key, lock):
     M = len(key)
     N = len(lock)
     answer = True
-    for i in range(-M + 1, N):
-        for j in range(-M + 1, N):
-            if open1(key, lock, i, j, N, M): #key의 왼쪽 위 값의 좌표
-                return answer
-    rotate(key, M)
-    for i in range(-M + 1, N):
-        for j in range(-M + 1, N):
-            if open1(key, lock, i, j, N, M): #key의 왼쪽 위 값의 좌표
-                return answer
-    rotate(key, M)
-    for i in range(-M + 1, N):
-        for j in range(-M + 1, N):
-            if open1(key, lock, i, j, N, M): #key의 왼쪽 위 값의 좌표
-                return answer
-    rotate(key, M)
-    for i in range(-M + 1, N):
-        for j in range(-M + 1, N):
-            if open1(key, lock, i, j, N, M): #key의 왼쪽 위 값의 좌표
-                return answer
+    for t in range(4):
+        for i in range(-M + 1, N):
+            for j in range(-M + 1, N):
+                if open1(key, lock, i, j, N, M): #key의 왼쪽 위 값의 좌표
+                    return answer
+        rotate(key, M)
     answer = False
     return answer
 
