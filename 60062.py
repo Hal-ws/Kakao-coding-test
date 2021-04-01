@@ -40,6 +40,8 @@ def wallchk(n, sIdx, weak): # start weak point의 idx를 변수로 받음. n: �
             for j in range(pIdx + 1, weakL):
                 p = pos[j]
                 if p - pos[pIdx] > dis: # 못닿음
+                    if nxtPidx == None:
+                        nxtPidx = pIdx + 1
                     break
                 else: # 닿음
                     chk[j] = 1
@@ -49,11 +51,8 @@ def wallchk(n, sIdx, weak): # start weak point의 idx를 변수로 받음. n: �
                 if cnt < result:
                     result = cnt
                 break
-            if nxtPidx == None:
-                break
             pIdx = nxtPidx # 다음으로 확인 시작할 point의 idx
     return result
 
 
-print(solution(10, [1], [1, 2, 3, 4]))
-
+print(solution(10, [1, 5], [1, 2]))
