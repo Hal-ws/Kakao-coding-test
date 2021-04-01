@@ -8,14 +8,22 @@ def solution(n, build_frame):
         setY, setX = n - y, x
         if flag1: #보
             if flag2: # 설치
-                setplate(setY, setX, n)
+                plate_board[setY][setX] = 1
+                if chk(n) == 0:
+                    plate_board[setY][setX] = 0
             else:  # 삭제
-                delplate(setY, setX, n)
+                plate_board[setY][setX] = 0
+                if chk(n) == 0:
+                    plate_board[setY][setX] = 1
         else: # 기둥
             if flag2: #설치
-                setpillar(setY, setX, n)
+                pillar_board[setY][setX] = 1
+                if chk(n) == 0:
+                    pillar_board[setY][setX] = 0
             else:
-                delpillar(setY, setX, n)
+                pillar_board[setY][setX] = 0
+                if chk(n) == 0:
+                    pillar_board[setY][setX] = 1
     answer = []
     for i in range(n + 1):
         for j in range(n + 1):
@@ -27,34 +35,6 @@ def solution(n, build_frame):
                 answer.append([x, y, 1])
     answer.sort()
     return answer
-
-
-def setpillar(y, x, n):
-    global pillar_board, plate_board
-    pillar_board[y][x] = 1
-    if chk(n) == 0:
-        pillar_board[y][x] = 0
-
-
-def setplate(y, x, n):
-    global pillar_board, plate_board
-    plate_board[y][x] = 1
-    if chk(n) == 0:
-        plate_board[y][x] = 0
-
-
-def delpillar(y, x, n):
-    global pillar_board, plate_board
-    pillar_board[y][x] = 0
-    if chk(n) == 0:
-        pillar_board[y][x] = 1
-
-
-def delplate(y, x, n):
-    global pillar_board, plate_board
-    plate_board[y][x] = 0
-    if chk(n) == 0:
-        plate_board[y][x] = 1
 
 
 def chk(n):
