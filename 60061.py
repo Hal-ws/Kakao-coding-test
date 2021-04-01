@@ -1,103 +1,82 @@
 def solution(n, build_frame):
-    pillar = [[0 for i in range(n + 1)] for j in range(n + 1)]
-    plate = [[0 for i in range(n + 1)] for j in range(n + 1)]
-    lb = len(build_frame)
-    for i in range(lb):
-        if build_frame[i][2] == 0 and build_frame[i][3] == 1:
-            setpillar(pillar, plate, build_frame[i], n)
-        if build_frame[i][2] == 1 and build_frame[i][3] == 1:
-            setplate(pillar, plate, build_frame[i], n)
-        if build_frame[i][2] == 0 and build_frame[i][3] == 0:
-            dispillar(pillar, plate, build_frame[i], n)
-        if build_frame[i][2] == 1 and build_frame[i][3] == 0:
-            displate(pillar, plate, build_frame[i], n)
-        print('pillar')
-        for j in range(n + 1):
-            print(pillar[j])
-        print('plate')
-        for j in range(n + 1):
-            print(plate[j])
-        print('****************************')
+    global pillar_board, plate_board
+    pillar_board = [[0 for j in range(n + 1)] for i in range(n + 1)]
+    plate_board = [[0 for j in range(n + 1)] for i in range(n + 1)]
+    l = len(build_frame)
+    for i in range(l):
+        x, y, flag1, flag2 = build_frame[i][0], build_frame[i][1], build_frame[i][2], build_frame[i][3]
+        setY, setX = n - y, x
+        if flag1: #보
+            if flag2: # 설치
+                setplate(setY, setX, n)
+            else:  # 삭제
+                delplate(setY, setX, n)
+        else: # 기둥
+            if flag2: #설치
+                setpillar(setY, setX, n)
+            else:
+                delpillar(setY, setX, n)
     answer = []
     for i in range(n + 1):
         for j in range(n + 1):
-            if pillar[i][j] == 1:
-                answer.append([j, n - i, 0])
-            if plate[i][j] == 1:
-                answer.append([j, n - i, 1])
+            if pillar_board[i][j]:
+                x, y = j, n - i
+                answer.append([x, y, 0])
+            if plate_board[i][j]:
+                x, y = j, n - i
+                answer.append([x, y, 1])
     answer.sort()
     return answer
 
 
-def setpillar(pillar, plate, command, n):
-    if command[1] == 0:
-        pillar[n - command[1]][command[0]] = 1
-    else:
-        if pillar[n - command[1] + 1][command[0]] == 1:
-            pillar[n - command[1]][command[0]] = 1
-        if command[0] > 0:
-            if plate[n - command[1]][command[0] - 1] == 1:
-                pillar[n - command[1]][command[0]] = 1
-        if command[0] < n:
-            if plate[n - command[1]][command[0]] == 1:
-                pillar[n - command[1]][command[0]] = 1
+def setpillar(y, x, n):
+    global pillar_board, plate_board
+    pillar_board[y][x] = 1
+    if chk(n) == 0:
+        pillar_board[y][x] = 0
 
 
-def setplate(pillar, plate, command, n):
-    if command[1] == 0:
-        plate[n - command[1]][command[0]] = 1
-    else:
-        if pillar[n - command[1] + 1][command[0]] == 1 or pillar[n - command[1] + 1][command[0] + 1] == 1:
-            plate[n - command[1]][command[0]] = 1
-        if command[0] > 0:
-            if plate[n - command[1]][command[0] - 1] == 1 and plate[n - command[1]][command[0] + 1] == 1:
-                plate[n - command[1]][command[0]] = 1
+def setplate(y, x, n):
+    global pillar_board, plate_board
+    plate_board[y][x] = 1
+    if chk(n) == 0:
+        plate_board[y][x] = 0
 
 
-def dispillar(pillar, plate, command, n):
-    pillar[n - command[1]][command[0]] = 0
-    flag = 1
+def delpillar(y, x, n):
+    global pillar_board, plate_board
+    pillar_board[y][x] = 0
+    if chk(n) == 0:
+        pillar_board[y][x] = 1
+
+
+def delplate(y, x, n):
+    global pillar_board, plate_board
+    plate_board[y][x] = 0
+    if chk(n) == 0:
+        plate_board[y][x] = 1
+
+
+def chk(n):
+    global pillar_board, plate_board
     for i in range(n + 1):
         for j in range(n + 1):
-            if stable(pillar, plate, 0, [i, j], n) == 0:
-                flag = 0
-                break
-    if flag == 0:
-        pillar[n - command[1]][command[0]] = 1
-
-
-def displate(pillar, plate, command, n):
-    plate[n - command[1]][command[0]] = 0
-    flag = 1 # flag가 1일때 해체 가능
-    for i in range(n + 1):
-        for j in range(n + 1):
-            if stable(pillar, plate, 1, [i, j], n) == 0:
-                flag = 0
-                break
-    if flag == 0: ## 해체하면 안될시 되돌림
-        plate[n - command[1]][command[0]] = 1
-
-
-def stable(pillar, plate, type, pos, n): ## type: 0은 pillar, type: 1은 plate
-    if pos[0] == n:
-        return 1
-    if type == 0:
-        if pillar[pos[0]][pos[1]] == 0:
-            return 1
-        if pillar[pos[0] + 1][pos[1]] == 1:
-            return 1
-        if pos[1] > 0 and plate[pos[0]][pos[1] - 1] == 1:
-            return 1
-        if pos[1] < n and plate[pos[0]][pos[1] + 1] == 1:
-            return 1
-    else:
-        if plate[pos[0]][pos[1]] == 0:
-            return 1
-        if pillar[pos[0] + 1][pos[1]] == 1 or pillar[pos[0] + 1][pos[1] + 1] == 1:
-            return 1
-        if 0 < pos[1] < n - 1 and plate[pos[0]][pos[1] - 1] == 1 and plate[pos[0]][pos[1] + 1] == 1:
-            return 1
-    return 0
-
-
-solution(5, [[1,0,0,1],[1,1,1,1],[2,1,0,1],[2,2,1,1],[5,0,0,1],[5,1,0,1],[3,2,1,1],[4,2,1,1]])
+            if pillar_board[i][j]: # pillar가 설치됐을때.
+                if i != n: # i가 n이면 무조건 가능함. 불가능한 경우를 찿음
+                    if pillar_board[i + 1][j] != 1:# # 밑에 기둥도 없음
+                        if j == 0:
+                            if plate_board[i][j] == 0: # 왼쪽 끝인데 오른쪽에 plate 없음
+                                return 0
+                        elif j == n: # 오른쪽 끝인데 왼쪽에 plate 없음
+                            if plate_board[i][j - 1] == 0:
+                                return 0
+                        else:
+                            if plate_board[i][j] == 0 and plate_board[i][j - 1] == 0: # 양쪽 다 plate가 없음
+                                return 0
+            if plate_board[i][j]:
+                if pillar_board[i + 1][j] == 0 and pillar_board[i + 1][j + 1] == 0: #밑에 pillar 없음
+                    if j == 0 or j == n - 1: # 한쪽 끝에 있어서 양쪽에 plate가 올수 없음
+                        return 0
+                    if plate_board[i][j - 1] == 0 or plate_board[i][j + 1] == 0:
+                        return 0
+    return 1
