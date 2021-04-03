@@ -20,10 +20,4 @@ def solution(n, s, a, b, fares):
         tmp = disMatrix[s][m] + disMatrix[m][a] + disMatrix[m][b]
         if tmp < answer:
             answer = tmp
-    if disMatrix[s][a] + disMatrix[s][b] < answer:
-        answer = disMatrix[s][a] + disMatrix[s][b]
-    if disMatrix[s][a] + disMatrix[a][b] < answer:
-        answer = disMatrix[s][a] + disMatrix[a][b]
-    if disMatrix[s][b] + disMatrix[b][a] < answer:
-        answer = disMatrix[s][b] + disMatrix[b][a]
     return answer
