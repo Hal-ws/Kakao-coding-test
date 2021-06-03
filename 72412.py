@@ -47,8 +47,7 @@ def solution(info, query):
             possIdx = possIdx & chickenChk
         if food == 'pizza':
             possIdx = possIdx & pizzaChk
-        possIdx = str(bin(possIdx))
-        possIdx = possIdx[2:]
+        possIdx = str(bin(possIdx))[2:]
         possIdx = '0' * (24 - len(possIdx)) + possIdx
         cnt = 0
         for i in range(24):
