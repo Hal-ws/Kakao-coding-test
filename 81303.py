@@ -8,12 +8,7 @@ def solution(n, k, cmd):
     for i in range(1, n - 1):
         linkedList[i][0] = i - 1
         linkedList[i][1] = i + 1
-    print('start')
-    print(linkedList)
-    print('----------------------------------------')
     for tmp in cmd:
-        print('cursor: %s' %cursor)
-        print('tmp: %s' %tmp)
         if tmp[0] == 'U' or tmp[0] == 'D':
             ud, dis = map(str, tmp.split())
             dis = int(dis)
@@ -26,10 +21,6 @@ def solution(n, k, cmd):
             cursor = delLine(cursor, linkedList, stack)
         if tmp[0] == 'Z':
             recover(stack, linkedList)
-        print('after cursor: %s' %cursor)
-        print('stack: %s' %stack)
-        print('result: %s' %linkedList)
-        print('----------------------------------------')
     for i in range(n):
         if linkedList[i][0] == linkedList[i][1] == None: # 삭제된 행
             answer += 'X'
@@ -54,7 +45,10 @@ def delLine(cursor, linkedList, stack):
     aCursor = linkedList[cursor][1]
     tmpCursor = cursor # 지울 위치 저장
     stack.append([bCursor, tmpCursor, aCursor])
-    cursor = moving(1, 1, cursor, linkedList) # 아래칸으로 이동
+    if aCursor != None:
+        cursor = moving(1, 1, cursor, linkedList) # 아래칸으로 이동
+    else:
+        cursor = moving(0, 1, cursor, linkedList)
     if bCursor != None:
         linkedList[bCursor][1] = linkedList[tmpCursor][1]
     if aCursor != None:
@@ -74,4 +68,4 @@ def recover(stack, linkedList):
         linkedList[aCursor][0] = rCursor
 
 
-print(solution(8, 2, 	["D 2","C","U 3","C","D 4","C","U 2","Z","Z"]))
+print(solution(8, 2, ["D 2","C","U 3","C","D 4","C","U 2","Z","Z", "U 1", "C"]))
