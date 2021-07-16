@@ -2,8 +2,8 @@ def solution(n, k, cmd):
     answer = ''
     cursor = k
     linkedList = [[0, 0] for i in range(n)] # 앞의 행, 다음 행
-    linkedList[0][0], linkedList[0][1] = None, 1
-    linkedList[n - 1][0], linkedList[n - 1][1] = n - 2, None
+    linkedList[0][0], linkedList[0][1] = None, 1 # 첫행
+    linkedList[n - 1][0], linkedList[n - 1][1] = n - 2, None # 끝행
     stack = []
     for i in range(1, n - 1):
         linkedList[i][0] = i - 1
@@ -60,12 +60,9 @@ def delLine(cursor, linkedList, stack):
 def recover(stack, linkedList):
     tmp = stack.pop()
     bCursor, rCursor, aCursor = tmp[0], tmp[1], tmp[2]
+    linkedList[rCursor][0] = bCursor
+    linkedList[rCursor][1] = aCursor
     if bCursor != None:
-        linkedList[rCursor][0] = bCursor
-        linkedList[rCursor][1] = aCursor
-    if aCursor != None:
         linkedList[bCursor][1] = rCursor
+    if aCursor != None:
         linkedList[aCursor][0] = rCursor
-
-
-print(solution(8, 2, ["D 2","C","U 3","C","D 4","C","U 2","Z","Z", "U 1", "C"]))
