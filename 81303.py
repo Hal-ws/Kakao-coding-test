@@ -32,11 +32,8 @@ def solution(n, k, cmd):
 def moving(ud, dis, cursor, linkedList): # 위/아래 방향, 거리, 현재 커서 위치
     cnt = 0
     while cnt < dis:
-        if linkedList[cursor][ud] != None: # 끝이 아닌 상태
-            cursor = linkedList[cursor][ud]
-            cnt += 1
-        else:
-            break
+        cursor = linkedList[cursor][ud]
+        cnt += 1
     return cursor
 
 
@@ -48,7 +45,7 @@ def delLine(cursor, linkedList, stack):
     if aCursor != None:
         cursor = moving(1, 1, cursor, linkedList) # 아래칸으로 이동
     else:
-        cursor = moving(0, 1, cursor, linkedList)
+        cursor = moving(0, 1, cursor, linkedList) # 위칸으로 이동
     if bCursor != None:
         linkedList[bCursor][1] = linkedList[tmpCursor][1]
     if aCursor != None:
